@@ -1,0 +1,184 @@
+---
+title: "Getting started with y2conjoint"
+vignette: >
+  %\VignetteIndexEntry{Getting started with y2conjoint}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+knitr:
+  opts_chunk:
+    collapse: true
+    comment: "#>"
+---
+
+```{r}
+#| label: setup
+#| include: false
+library(y2conjoint)
+```
+
+`y2conjoint` provides data structures and functions for working with the output
+of a choice-based conjoint study. This article walks through a full example:
+loading raw utilities, describing their structure, defining products, and
+estimating preference shares for a competitive set.
+
+## The raw data
+
+A conjoint model produces one *part-worth utility* per respondent per attribute
+level. These arrive in a terse "model format" where columns are named
+`A[NUM]B[NUM]` — attribute *i*, level *j*. The package ships a small simulated
+example:
+
+```{r}
+#| label: raw-data
+head(example_utilities)
+```
+
+Alongside the utilities we need a **crosswalk** that says what each column means:
+which attribute (collection) it belongs to, its human-readable name, and — for
+ordered attributes like price — its rank.
+
+```{r}
+#| label: crosswalk
+example_crosswalk
+```
+
+Here `Brand` is unordered (`collection_order` is `NA`), while `Price` and
+`Battery` are ordered.
+
+## Building a conjoint_df
+
+`conjoint_df()` renames the model-format columns to their user-facing names and
+records the collection structure as metadata. Extra columns (IDs, demographics)
+are carried along untouched.
+
+```{r}
+#| label: build
+cjt <- conjoint_df(example_utilities, example_crosswalk)
+cjt
+```
+
+The print header summarizes the collections (a trailing `*` marks an ordered
+one), the outside-good column, and how many extra columns are present.
+
+### Collections
+
+Each collection groups the level columns of one attribute:
+
+```{r}
+#| label: collections
+cjt |>
+  protected_cols()
+```
+
+The level columns and the `NONE` outside good are **protected**. You can wrangle
+demographics freely, but the utility columns cannot be dropped, renamed, or
+overwritten by accident.
+
+```{r}
+#| label: filter-ok
+# Filtering rows and editing demographics is fine.
+cjt |>
+  dplyr::filter(age >= 40) |>
+  dplyr::mutate(age_decade = age %/% 10 * 10)
+```
+
+```{r}
+#| label: protected-error
+#| error: true
+# Overwriting a protected column is blocked.
+cjt |>
+  dplyr::mutate(Northwind = 0)
+```
+
+If you genuinely need to reshape the utilities, call `tibble::as_tibble()` first
+to drop the guardrails.
+
+## Describing products with specs
+
+A `spec` describes one product by selecting levels across collections. Selecting
+a single level per collection is the common case:
+
+```{r}
+#| label: spec
+flagship <- spec(cjt, c("Meridian", "$399", "20 hours"), name = "Flagship")
+flagship
+```
+
+You may select *several* levels within one collection — useful for co-branded
+products, where the combine function (below) decides how to merge them.
+
+```{r}
+#| label: spec-cobrand
+co_brand <- spec(cjt, c("Northwind", "Cascade", "$199", "10 hours"), name = "Co-brand")
+```
+
+## Competitive sets and preference shares
+
+A `competitive_set` bundles the products that compete for choice. `run_scenario()`
+applies a logit (softmax) choice model: it turns each respondent's product
+utilities into choice probabilities, lets the `NONE` outside good compete, and
+averages the probabilities into mean preference shares.
+
+```{r}
+#| label: scenario
+market <- competitive_set(
+  list(
+    spec(cjt, c("Northwind", "$199", "20 hours"), name = "Value"),
+    spec(cjt, c("Cascade", "$299", "20 hours"), name = "Mainstream"),
+    spec(cjt, c("Meridian", "$399", "20 hours"), name = "Premium")
+  ),
+  name = "Launch"
+)
+
+shares <- run_scenario(cjt, market)
+shares
+```
+
+`total_share` is the combined share captured by the three products; the
+remainder goes to the outside good.
+
+```{r}
+#| label: plot
+#| fig-alt: "Bar chart of preference share by product."
+#| fig-width: 6
+#| fig-height: 3
+library(ggplot2)
+
+shares |>
+  dplyr::select(-total_share) |>
+  tidyr::pivot_longer(everything(), names_to = "product", values_to = "share") |>
+  dplyr::mutate(product = sub("^share_", "", product)) |>
+  ggplot(aes(share, reorder(product, share))) +
+  geom_col() +
+  labs(x = "Preference share", y = NULL)
+```
+
+## Combining levels within a collection
+
+When a product selects more than one level from a collection, `combine_fn`
+decides how to merge them. The default, `pmax()`, takes the best available level
+(a reasonable rule for co-branding: buyers respond to the more appealing brand).
+
+You can also pass a **named list** to use different rules per collection. Any
+collection you omit falls back to `pmax()`:
+
+```{r}
+#| label: combine-fn
+run_scenario(
+  cjt,
+  market,
+  combine_fn = list(Brand = pmax, Price = pmax)
+)
+```
+
+## Scaling choice probabilities
+
+`scaling_factor` multiplies every utility before the softmax. Values above 1
+sharpen the shares toward the most attractive product; values below 1 flatten
+them toward an even split. It is a convenient handle for calibrating a simulator
+to known market conditions.
+
+```{r}
+#| label: scaling
+run_scenario(cjt, market, scaling_factor = 2)
+```

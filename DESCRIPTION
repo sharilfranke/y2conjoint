@@ -4,16 +4,24 @@ Version: 0.0.0.9000
 Authors@R: 
     person("Adam", "Hubbs", , "adam@y2analytics.com", role = c("aut", "cre"))
 Description: Provides data structures and helper functions for working with conjoint survey data. 
-License: GPT (>= 3) + file LICENSE
+License: GPL (>= 3) + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 8.0.0
 Suggests:
-    testthat (>= 3.0.0)
+    ggplot2,
+    quarto,
+    testthat (>= 3.0.0),
+    tidyr
 Config/testthat/edition: 3
+VignetteBuilder: quarto
 Depends:
     R (>= 4.1.0)
 Imports:
     S7,
     cli,
-    rlang
+    dplyr,
+    purrr,
+    rlang,
+    tibble
+LazyData: true

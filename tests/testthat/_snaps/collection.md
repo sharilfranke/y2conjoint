@@ -1,0 +1,27 @@
+# collection rejects empty levels
+
+    Code
+      collection(name = "Brand", levels = character())
+    Condition
+      Error:
+      ! <y2conjoint::collection> object is invalid:
+      - @levels must contain at least one level
+
+# collection rejects duplicate levels
+
+    Code
+      collection(name = "Brand", levels = c("A", "A"))
+    Condition
+      Error:
+      ! <y2conjoint::collection> object is invalid:
+      - @levels must be unique
+
+# collection rejects an empty name
+
+    Code
+      collection(name = "", levels = "A")
+    Condition
+      Error:
+      ! <y2conjoint::collection> object is invalid:
+      - @name must be a single non-empty string
+

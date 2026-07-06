@@ -1,3 +1,10 @@
 ^LICENSE\.md$
 ^y2conjoint\.Rproj$
 ^\.Rproj\.user$
+^README\.qmd$
+^[.]?air[.]toml$
+^[.]?jarl[.]toml$
+^\.vscode$
+^\.github$
+^\.claude$
+^data-raw$
