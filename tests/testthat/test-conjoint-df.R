@@ -60,7 +60,7 @@ test_that("conjoint_df errors when one old_name maps to multiple collections", {
   extra <- crosswalk[1, ]
   extra$collection_name <- "Other"
   extra$user_name <- "Northwind2"
-  crosswalk <- rbind(crosswalk, extra)
+  crosswalk <- dplyr::bind_rows(crosswalk, extra)
   expect_snapshot(error = TRUE, conjoint_df(sample_data(), crosswalk))
 })
 
