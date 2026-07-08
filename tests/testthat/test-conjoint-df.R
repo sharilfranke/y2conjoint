@@ -64,6 +64,12 @@ test_that("conjoint_df errors when one old_name maps to multiple collections", {
   expect_snapshot(error = TRUE, conjoint_df(sample_data(), crosswalk))
 })
 
+test_that("conjoint_df errors when a user_name collides with an existing column", {
+  crosswalk <- sample_crosswalk()
+  crosswalk$user_name[1] <- "age"
+  expect_snapshot(error = TRUE, conjoint_df(sample_data(), crosswalk))
+})
+
 test_that("conjoint_df errors when the NONE column is absent", {
   data <- sample_data()
   data$NONE <- NULL
