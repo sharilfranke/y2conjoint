@@ -122,11 +122,9 @@ averages the probabilities into mean preference shares.
 ```{r}
 #| label: scenario
 market <- competitive_set(
-  list(
-    spec(cjt, c("Northwind", "$199", "20 hours"), name = "Value"),
-    spec(cjt, c("Cascade", "$299", "20 hours"), name = "Mainstream"),
-    spec(cjt, c("Meridian", "$399", "20 hours"), name = "Premium")
-  ),
+  spec(cjt, c("Northwind", "$199", "20 hours"), name = "Value"),
+  spec(cjt, c("Cascade", "$299", "20 hours"), name = "Mainstream"),
+  spec(cjt, c("Meridian", "$399", "20 hours"), name = "Premium"),
   name = "Launch"
 )
 

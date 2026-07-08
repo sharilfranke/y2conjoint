@@ -3,16 +3,17 @@
 #' A `competitive_set` is an ordered list of [spec]s that compete for share in a
 #' scenario. All specs must reference the same set of collections.
 #'
-#' @param specs A list of [spec] objects.
+#' @param ... [spec] objects that compete for share. Pass them individually;
+#'   they are collected into the set's `specs`.
 #' @param name An optional single string naming the set.
 #'
 #' @return A `competitive_set` object.
 #' @examples
 #' cjt <- conjoint_df(example_utilities, example_crosswalk)
-#' competitive_set(list(
+#' competitive_set(
 #'   spec(cjt, c("Northwind", "$299", "20 hours"), name = "Flagship"),
 #'   spec(cjt, c("Cascade", "$199", "10 hours"), name = "Budget")
-#' ))
+#' )
 #' @export
 competitive_set <- S7::new_class(
   "competitive_set",
@@ -20,8 +21,8 @@ competitive_set <- S7::new_class(
     name = S7::class_character,
     specs = S7::class_list
   ),
-  constructor = function(specs, name = character()) {
-    S7::new_object(S7::S7_object(), name = name, specs = specs)
+  constructor = function(..., name = character()) {
+    S7::new_object(S7::S7_object(), name = name, specs = list(...))
   },
   validator = function(self) {
     validate_competitive_set(self@name, self@specs)
