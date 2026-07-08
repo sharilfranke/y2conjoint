@@ -16,6 +16,21 @@
 #'   collection absent from the list falls back to [pmax()].
 #'
 #' @return A numeric vector, one utility per row of `x`.
+#' @examples
+#' cjt <- conjoint_df(example_utilities, example_crosswalk)
+#' flagship <- spec(
+#'   cjt,
+#'   c("Northwind", "$299", "20 hours", "256 GB", "Black"),
+#'   name = "Flagship"
+#' )
+#' head(compute_product_utility(cjt, flagship))
+#'
+#' # Sum the brand levels of a co-branded product instead of taking the best.
+#' co_brand <- spec(
+#'   cjt,
+#'   c("Northwind", "Cascade", "$199", "20 hours", "256 GB", "Black")
+#' )
+#' head(compute_product_utility(cjt, co_brand, combine_fn = list(Brand = `+`)))
 #' @export
 compute_product_utility <- function(x, spec, combine_fn = pmax) {
   # Keep only the collections this product actually selects a level from.
@@ -55,6 +70,17 @@ compute_product_utility <- function(x, spec, combine_fn = pmax) {
 #'
 #' @return A one-row tibble with one `share_*` column per product in the
 #'   competitive set.
+#' @examples
+#' cjt <- conjoint_df(example_utilities, example_crosswalk)
+#' market <- competitive_set(
+#'   spec(cjt, c("Northwind", "$199", "20 hours", "256 GB", "Black"), name = "Value"),
+#'   spec(cjt, c("Meridian", "$399", "30 hours", "512 GB", "Black"), name = "Premium"),
+#'   name = "Launch"
+#' )
+#' run_scenario(cjt, market)
+#'
+#' # Sharpen the shares toward the most attractive product.
+#' run_scenario(cjt, market, scaling_factor = 2)
 #' @export
 run_scenario <- function(
   x,

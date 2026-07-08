@@ -30,3 +30,19 @@ products that list two brands are handled), and
 \item summing those per-collection values \emph{across} collections.
 }
 }
+\examples{
+cjt <- conjoint_df(example_utilities, example_crosswalk)
+flagship <- spec(
+  cjt,
+  c("Northwind", "$299", "20 hours", "256 GB", "Black"),
+  name = "Flagship"
+)
+head(compute_product_utility(cjt, flagship))
+
+# Sum the brand levels of a co-branded product instead of taking the best.
+co_brand <- spec(
+  cjt,
+  c("Northwind", "Cascade", "$199", "20 hours", "256 GB", "Black")
+)
+head(compute_product_utility(cjt, co_brand, combine_fn = list(Brand = `+`)))
+}

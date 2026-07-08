@@ -86,6 +86,9 @@ validate_collection_fields <- function(name, levels) {
 #'
 #' @param x A [collection] object.
 #' @return A single logical.
+#' @examples
+#' is_ordered(collection("Brand", c("Northwind", "Cascade")))
+#' is_ordered(ordered_collection("Price", c("$199", "$299", "$399")))
 #' @export
 is_ordered <- function(x) {
   S7::S7_inherits(x, ordered_collection)

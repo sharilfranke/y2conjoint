@@ -30,3 +30,15 @@ product is turned into a probability of choosing it, and those probabilities
 are averaged across respondents to give each product's mean preference share.
 The NONE outside good competes for share as a "choose nothing" option.
 }
+\examples{
+cjt <- conjoint_df(example_utilities, example_crosswalk)
+market <- competitive_set(
+  spec(cjt, c("Northwind", "$199", "20 hours", "256 GB", "Black"), name = "Value"),
+  spec(cjt, c("Meridian", "$399", "30 hours", "512 GB", "Black"), name = "Premium"),
+  name = "Launch"
+)
+run_scenario(cjt, market)
+
+# Sharpen the shares toward the most attractive product.
+run_scenario(cjt, market, scaling_factor = 2)
+}

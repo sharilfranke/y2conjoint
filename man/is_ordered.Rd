@@ -15,3 +15,7 @@ A single logical.
 \description{
 Is a collection ordered?
 }
+\examples{
+is_ordered(collection("Brand", c("Northwind", "Cascade")))
+is_ordered(ordered_collection("Price", c("$199", "$299", "$399")))
+}

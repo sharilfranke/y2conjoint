@@ -196,6 +196,9 @@ conjoint_none <- function(x) {
 #'
 #' @param x A [conjoint_df].
 #' @return A character vector of column names.
+#' @examples
+#' cjt <- conjoint_df(example_utilities, example_crosswalk)
+#' protected_cols(cjt)
 #' @export
 protected_cols <- function(x) {
   levels <- purrr::list_c(purrr::map(
