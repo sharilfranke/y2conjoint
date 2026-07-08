@@ -49,18 +49,35 @@ validate_competitive_set <- function(name, specs) {
 }
 
 S7::method(print, competitive_set) <- function(x, ...) {
+  specs <- x@specs
   label <- if (length(x@name) == 1) x@name else "(unnamed)"
-  cat(
-    cli::cli_fmt({
-      cli::cli_text(
-        "{.cls competitive_set} {.strong {label}}: {length(x@specs)} spec{?s}"
-      )
-      for (s in x@specs) {
-        nm <- if (length(s@name) == 1) s@name else "(unnamed)"
-        cli::cli_li("{nm}")
-      }
-    }),
-    sep = "\n"
+
+  named <- purrr::map_chr(specs, function(s) {
+    if (length(s@name) == 1 && nzchar(s@name)) s@name else NA_character_
+  })
+  named_names <- named[!is.na(named)]
+  n_unnamed <- sum(is.na(named))
+  unnamed_phrase <- paste0(
+    n_unnamed,
+    " unnamed spec",
+    if (n_unnamed == 1) "" else "s"
   )
+  # cli collapses this vector with commas and a trailing "and".
+  descriptor <- c(named_names, if (n_unnamed > 0) unnamed_phrase)
+
+  cat(
+    cli::cli_fmt(
+      cli::cli_text(
+        "{.cls competitive_set} {.strong {label}}: {length(specs)} spec{?s}: {descriptor}"
+      )
+    ),
+    "\n",
+    sep = ""
+  )
+  # Print each spec indented so the set reads as a set of products.
+  for (s in specs) {
+    cat("\n")
+    cat(paste0("  ", utils::capture.output(print(s))), sep = "\n")
+  }
   invisible(x)
 }
