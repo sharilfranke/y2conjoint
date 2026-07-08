@@ -11,6 +11,31 @@ test_that("ordered_collection is ordered and keeps level order", {
   expect_equal(cl@levels, c("$249", "$299"))
 })
 
+test_that("ordered_collection order defaults to unique(levels)", {
+  cl <- ordered_collection(name = "Price", levels = c("$249", "$299"))
+  expect_equal(cl@order, c("$249", "$299"))
+})
+
+test_that("ordered_collection stores an explicit order", {
+  cl <- ordered_collection(
+    name = "Price",
+    levels = c("$299", "$249"),
+    order = c("$249", "$299")
+  )
+  expect_equal(cl@order, c("$249", "$299"))
+})
+
+test_that("ordered_collection rejects an order that mismatches levels", {
+  expect_snapshot(
+    error = TRUE,
+    ordered_collection(
+      name = "Price",
+      levels = c("$249", "$299"),
+      order = c("$249", "$399")
+    )
+  )
+})
+
 test_that("collection rejects empty levels", {
   expect_snapshot(
     error = TRUE,

@@ -172,7 +172,11 @@ build_one_collection <- function(rows) {
   if (all(is.na(order))) {
     return(collection(name = name, levels = rows$user_name))
   }
-  ordered_collection(name = name, levels = rows$user_name[order(order)])
+  ordered_collection(
+    name = name,
+    levels = rows$user_name,
+    order = rows$user_name[order(order)]
+  )
 }
 
 #' @keywords internal

@@ -1,3 +1,13 @@
+# ordered_collection rejects an order that mismatches levels
+
+    Code
+      ordered_collection(name = "Price", levels = c("$249", "$299"), order = c("$249",
+        "$399"))
+    Condition
+      Error:
+      ! <y2conjoint::ordered_collection> object is invalid:
+      - @order must contain exactly the same levels as @levels
+
 # collection rejects empty levels
 
     Code
