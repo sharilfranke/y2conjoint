@@ -7,12 +7,25 @@
 #'
 #' @param name A single string naming the collection.
 #' @param levels A character vector of the level (column) names that make up the
-#'   collection. For `ordered_collection`, supply them in the intended order.
+#'   collection.
+#' @param order For `ordered_collection`, a character vector giving the levels
+#'   in their intended order. It must contain exactly the same levels as
+#'   `levels`. Defaults to `unique(levels)`, i.e. the order in which `levels`
+#'   were supplied.
 #'
 #' @return A `collection` or `ordered_collection` object.
 #' @examples
 #' collection(name = "Brand", levels = c("Northwind", "Cascade"))
+#'
+#' # By default the level order is taken from `levels`.
 #' ordered_collection(name = "Price", levels = c("$199", "$299", "$399"))
+#'
+#' # Supply `order` to rank levels independently of how they were listed.
+#' ordered_collection(
+#'   name = "Price",
+#'   levels = c("$399", "$199", "$299"),
+#'   order = c("$199", "$299", "$399")
+#' )
 #' @export
 collection <- S7::new_class(
   "collection",
@@ -29,8 +42,28 @@ collection <- S7::new_class(
 #' @export
 ordered_collection <- S7::new_class(
   "ordered_collection",
-  parent = collection
+  parent = collection,
+  properties = list(
+    order = S7::class_character
+  ),
+  constructor = function(name, levels, order = unique(levels)) {
+    S7::new_object(
+      collection(name = name, levels = levels),
+      order = order
+    )
+  },
+  validator = function(self) {
+    validate_order(self@order, self@levels)
+  }
 )
+
+#' @keywords internal
+validate_order <- function(order, levels) {
+  if (length(order) != length(levels) || !setequal(order, levels)) {
+    return("@order must contain exactly the same levels as @levels")
+  }
+  NULL
+}
 
 #' @keywords internal
 validate_collection_fields <- function(name, levels) {
@@ -65,10 +98,11 @@ collection_levels <- function(x) {
 
 S7::method(print, collection) <- function(x, ...) {
   ordered <- if (is_ordered(x)) " (ordered)" else ""
+  levels <- if (is_ordered(x)) x@order else x@levels
   cat(
     cli::cli_fmt({
       cli::cli_text("{.cls collection} {.strong {x@name}}{ordered}")
-      cli::cli_ul(x@levels)
+      cli::cli_ul(levels)
     }),
     sep = "\n"
   )

@@ -7,13 +7,18 @@
 \usage{
 collection(name = character(0), levels = character(0))
 
-ordered_collection(name = character(0), levels = character(0))
+ordered_collection(name, levels, order = unique(levels))
 }
 \arguments{
 \item{name}{A single string naming the collection.}
 
 \item{levels}{A character vector of the level (column) names that make up the
-collection. For \code{ordered_collection}, supply them in the intended order.}
+collection.}
+
+\item{order}{For \code{ordered_collection}, a character vector giving the levels
+in their intended order. It must contain exactly the same levels as
+\code{levels}. Defaults to \code{unique(levels)}, i.e. the order in which \code{levels}
+were supplied.}
 }
 \value{
 A \code{collection} or \code{ordered_collection} object.
@@ -26,5 +31,14 @@ order of \code{levels} (there is no enforcement of that order elsewhere yet).
 }
 \examples{
 collection(name = "Brand", levels = c("Northwind", "Cascade"))
+
+# By default the level order is taken from `levels`.
 ordered_collection(name = "Price", levels = c("$199", "$299", "$399"))
+
+# Supply `order` to rank levels independently of how they were listed.
+ordered_collection(
+  name = "Price",
+  levels = c("$399", "$199", "$299"),
+  order = c("$199", "$299", "$399")
+)
 }
