@@ -215,9 +215,12 @@ print_conjoint_df <- function(x, ...) {
   cat(
     cli::cli_fmt({
       cli::cli_text(
-        "{.cls conjoint_df}: {length(collections)} collection{?s} (* = ordered), NONE = {.field {conjoint_none(x)}}, {n_extra} extra column{?s}"
+        "{.cls conjoint_df}: {length(collections)} collection{?s}"
       )
       cli::cli_text("Collections: {.field {labels}}")
+      cli::cli_text(
+        "(* = ordered), NONE = {.field {conjoint_none(x)}}, {n_extra} extra column{?s}"
+      )
     }),
     sep = "\n"
   )

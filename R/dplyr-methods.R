@@ -73,9 +73,9 @@ abort_protected <- function(
 ) {
   cli::cli_abort(
     c(
-      "x" = "Can't {action} the protected column{?s} {.field {cols}}.",
-      "!" = "Level and {.field NONE} columns of a {.cls conjoint_df} are protected.",
-      "i" = "Convert with {.fn tibble::as_tibble} first to edit them freely."
+      "x" = "Can't {action} the protected column{?s}: {.field {cols}}.",
+      "!" = "The {.field NONE} column and columns that are part of a collection in a {.cls conjoint_df} are protected.",
+      "i" = "Convert to a tibble with {.fn tibble::as_tibble} to edit them."
     ),
     call = call
   )
