@@ -16,15 +16,24 @@
       
         <spec> A
         * Brand: Northwind
-        * Price: $249
+        * Price: $199
+        * Battery: 20 hours
+        * Storage: 256 GB
+        * Color: Black
       
         <spec> B
         * Brand: Cascade
         * Price: $299
+        * Battery: 10 hours
+        * Storage: 128 GB
+        * Color: Blue
       
         <spec> (unnamed)
-        * Brand: Northwind
-        * Price: $299
+        * Brand: Meridian
+        * Price: $399
+        * Battery: 30 hours
+        * Storage: 512 GB
+        * Color: Silver
 
 # competitive_set rejects specs over different collections
 

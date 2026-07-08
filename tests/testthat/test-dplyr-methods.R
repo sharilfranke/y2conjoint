@@ -2,7 +2,7 @@ test_that("filter preserves the conjoint_df class and metadata", {
   cjt <- sample_conjoint()
   out <- dplyr::filter(cjt, age > 28)
   expect_s3_class(out, "conjoint_df")
-  expect_equal(nrow(out), 2)
+  expect_equal(nrow(out), sum(cjt$age > 28))
   expect_setequal(protected_cols(out), protected_cols(cjt))
 })
 
@@ -21,7 +21,7 @@ test_that("selecting demographics alongside all protected columns is allowed", {
 
 test_that("renaming a demographic column is allowed", {
   cjt <- sample_conjoint()
-  out <- dplyr::rename(cjt, respondent = ID)
+  out <- dplyr::rename(cjt, respondent = respondent_id)
   expect_s3_class(out, "conjoint_df")
   expect_contains(names(out), "respondent")
 })

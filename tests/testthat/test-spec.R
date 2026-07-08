@@ -1,14 +1,21 @@
 test_that("spec groups levels by collection", {
   cjt <- sample_conjoint()
-  s <- spec(cjt, c("Northwind", "$249"), name = "Cheap")
+  s <- spec(
+    cjt,
+    c("Northwind", "$199", "20 hours", "256 GB", "Black"),
+    name = "Cheap"
+  )
   expect_equal(s@name, "Cheap")
   expect_equal(s@selections$Brand, "Northwind")
-  expect_equal(s@selections$Price, "$249")
+  expect_equal(s@selections$Price, "$199")
 })
 
 test_that("spec allows multiple levels within one collection", {
   cjt <- sample_conjoint()
-  s <- spec(cjt, c("Northwind", "Cascade", "$249"))
+  s <- spec(
+    cjt,
+    c("Northwind", "Cascade", "$199", "20 hours", "256 GB", "Black")
+  )
   expect_setequal(s@selections$Brand, c("Northwind", "Cascade"))
 })
 

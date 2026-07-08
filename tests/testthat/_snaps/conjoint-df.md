@@ -40,13 +40,24 @@
     Code
       print(sample_conjoint())
     Output
-      <conjoint_df>: 2 collections
-      Collections: Brand and Price*
-      (* = ordered), NONE = NONE, 2 extra columns
-      # A tibble: 3 x 7
-           ID Northwind Cascade `$249` `$299`  NONE   age
-        <int>     <dbl>   <dbl>  <dbl>  <dbl> <dbl> <dbl>
-      1     1       0.2    -0.3    0.1    0     0      30
-      2     2      -0.1     0.4    0.2   -0.1   0.1    40
-      3     3       0.5     0.1   -0.2    0.4  -0.2    25
+      <conjoint_df>: 5 collections
+      Collections: Brand, Price*, Battery*, Storage*, and Color
+      (* = ordered), NONE = NONE, 5 extra columns
+      # A tibble: 200 x 21
+         respondent_id Northwind Cascade Meridian `$199` `$299` `$399` `10 hours`
+                 <int>     <dbl>   <dbl>    <dbl>  <dbl>  <dbl>  <dbl>      <dbl>
+       1             1    -0.178   0.362    0.042  0.596 -0.573 -1.05      -0.387
+       2             2     0.909   0.303   -0.792  0.409  0.369 -1.47      -0.468
+       3             3    -0.26   -0.82     0.044  0.188  0.151 -0.311     -0.401
+       4             4    -0.062   0.226   -0.372  0.463  0.161 -0.248     -0.265
+       5             5     0.292   0.46    -0.848  0.946  0.26  -1.23      -0.419
+       6             6     0.382   0.65    -0.15   0.353  0.399 -0.466     -0.187
+       7             7     0.095  -0.429    0.584  0.556  0.2    0.239     -0.74 
+       8             8     0.803   0.588   -0.297  1.31   0.307 -0.423     -0.647
+       9             9     0.249   1.62    -0.262  0.656 -0.136 -0.5       -0.608
+      10            10     0.23   -0.212   -1.30   0.549 -0.666 -0.428     -0.473
+      # i 190 more rows
+      # i 13 more variables: `20 hours` <dbl>, `30 hours` <dbl>, `128 GB` <dbl>,
+      #   `256 GB` <dbl>, `512 GB` <dbl>, Black <dbl>, Silver <dbl>, Blue <dbl>,
+      #   NONE <dbl>, age <int>, gender <chr>, region <chr>, income <dbl>
 
