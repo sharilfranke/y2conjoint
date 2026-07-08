@@ -16,3 +16,7 @@ A character vector of column names.
 The level columns of every collection plus the \code{none} column. These columns
 cannot be dropped, renamed, or overwritten in place.
 }
+\examples{
+cjt <- conjoint_df(example_utilities, example_crosswalk)
+protected_cols(cjt)
+}

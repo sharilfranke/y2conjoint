@@ -14,10 +14,17 @@
 #' cjt <- conjoint_df(example_utilities, example_crosswalk)
 #'
 #' # Select one level per collection.
-#' spec(cjt, c("Northwind", "$299", "20 hours"), name = "Flagship")
+#' spec(cjt, c("Northwind", "$299", "20 hours", "256 GB", "Black"), name = "Flagship")
 #'
 #' # Selecting several brands models a co-branded product.
-#' spec(cjt, c("Northwind", "Cascade", "$199"), name = "Co-brand")
+#' spec(
+#'   cjt,
+#'   c("Northwind", "Cascade", "$199", "10 hours", "128 GB", "Blue"),
+#'   name = "Co-brand"
+#' )
+#'
+#' # Any subset is allowed; omitted collections warn and contribute no utility.
+#' spec(cjt, c("Meridian", "$399"), name = "Sparse")
 #' @export
 spec <- S7::new_class(
   "spec",

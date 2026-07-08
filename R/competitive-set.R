@@ -11,8 +11,9 @@
 #' @examples
 #' cjt <- conjoint_df(example_utilities, example_crosswalk)
 #' competitive_set(
-#'   spec(cjt, c("Northwind", "$299", "20 hours"), name = "Flagship"),
-#'   spec(cjt, c("Cascade", "$199", "10 hours"), name = "Budget")
+#'   spec(cjt, c("Northwind", "$299", "20 hours", "256 GB", "Black"), name = "Flagship"),
+#'   spec(cjt, c("Cascade", "$199", "10 hours", "128 GB", "Blue"), name = "Budget"),
+#'   name = "Launch"
 #' )
 #' @export
 competitive_set <- S7::new_class(
