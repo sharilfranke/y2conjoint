@@ -40,8 +40,9 @@
     Code
       print(sample_conjoint())
     Output
-      <conjoint_df>: 2 collections (* = ordered), NONE = NONE, 2 extra columns
+      <conjoint_df>: 2 collections
       Collections: Brand and Price*
+      (* = ordered), NONE = NONE, 2 extra columns
       # A tibble: 3 x 7
            ID Northwind Cascade `$249` `$299`  NONE   age
         <int>     <dbl>   <dbl>  <dbl>  <dbl> <dbl> <dbl>

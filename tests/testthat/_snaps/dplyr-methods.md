@@ -4,9 +4,9 @@
       dplyr::mutate(cjt, Northwind = 0)
     Condition
       Error in `dplyr::mutate()`:
-      x Can't overwrite the protected column Northwind.
-      ! Level and NONE columns of a <conjoint_df> are protected.
-      i Convert with `tibble::as_tibble()` first to edit them freely.
+      x Can't overwrite the protected column: Northwind.
+      ! The NONE column and columns that are part of a collection in a <conjoint_df> are protected.
+      i Convert to a tibble with `tibble::as_tibble()` to edit them.
 
 # dropping a protected column via select errors
 
@@ -14,9 +14,9 @@
       dplyr::select(cjt, age)
     Condition
       Error in `dplyr::select()`:
-      x Can't drop or rename the protected column Northwind, Cascade, $249, $299, and NONE.
-      ! Level and NONE columns of a <conjoint_df> are protected.
-      i Convert with `tibble::as_tibble()` first to edit them freely.
+      x Can't drop or rename the protected column: Northwind, Cascade, $249, $299, and NONE.
+      ! The NONE column and columns that are part of a collection in a <conjoint_df> are protected.
+      i Convert to a tibble with `tibble::as_tibble()` to edit them.
 
 # renaming a protected column errors
 
@@ -24,9 +24,9 @@
       dplyr::rename(cjt, brand = Northwind)
     Condition
       Error in `dplyr::rename()`:
-      x Can't drop or rename the protected column Northwind.
-      ! Level and NONE columns of a <conjoint_df> are protected.
-      i Convert with `tibble::as_tibble()` first to edit them freely.
+      x Can't drop or rename the protected column: Northwind.
+      ! The NONE column and columns that are part of a collection in a <conjoint_df> are protected.
+      i Convert to a tibble with `tibble::as_tibble()` to edit them.
 
 # errors are attributed to the dplyr verb, not internal helpers
 
@@ -34,9 +34,9 @@
       dplyr::mutate(cjt, NONE = 0)
     Condition
       Error in `dplyr::mutate()`:
-      x Can't overwrite the protected column NONE.
-      ! Level and NONE columns of a <conjoint_df> are protected.
-      i Convert with `tibble::as_tibble()` first to edit them freely.
+      x Can't overwrite the protected column: NONE.
+      ! The NONE column and columns that are part of a collection in a <conjoint_df> are protected.
+      i Convert to a tibble with `tibble::as_tibble()` to edit them.
 
 ---
 
@@ -44,9 +44,9 @@
       dplyr::rename_with(cjt, toupper)
     Condition
       Error in `dplyr::rename_with()`:
-      x Can't drop or rename the protected column Northwind and Cascade.
-      ! Level and NONE columns of a <conjoint_df> are protected.
-      i Convert with `tibble::as_tibble()` first to edit them freely.
+      x Can't drop or rename the protected column: Northwind and Cascade.
+      ! The NONE column and columns that are part of a collection in a <conjoint_df> are protected.
+      i Convert to a tibble with `tibble::as_tibble()` to edit them.
 
 # transmute is unsupported and suggests alternatives
 
@@ -65,9 +65,9 @@
       cjt$Northwind <- 0
     Condition
       Error in `$<-`:
-      x Can't overwrite the protected column Northwind.
-      ! Level and NONE columns of a <conjoint_df> are protected.
-      i Convert with `tibble::as_tibble()` first to edit them freely.
+      x Can't overwrite the protected column: Northwind.
+      ! The NONE column and columns that are part of a collection in a <conjoint_df> are protected.
+      i Convert to a tibble with `tibble::as_tibble()` to edit them.
 
 ---
 
@@ -75,7 +75,7 @@
       cjt[["NONE"]] <- 1
     Condition
       Error in `[[<-`:
-      x Can't overwrite the protected column NONE.
-      ! Level and NONE columns of a <conjoint_df> are protected.
-      i Convert with `tibble::as_tibble()` first to edit them freely.
+      x Can't overwrite the protected column: NONE.
+      ! The NONE column and columns that are part of a collection in a <conjoint_df> are protected.
+      i Convert to a tibble with `tibble::as_tibble()` to edit them.
 
