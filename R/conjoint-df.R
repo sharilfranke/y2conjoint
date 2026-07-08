@@ -81,6 +81,16 @@ validate_conjoint_input <- function(
       call = call
     )
   }
+  dup_old <- unique(crosswalk$old_name[duplicated(crosswalk$old_name)])
+  if (length(dup_old) > 0) {
+    cli::cli_abort(
+      c(
+        "x" = "Each {.field old_name} in {.arg crosswalk} must map to one collection.",
+        "!" = "Assigned more than once: {.field {dup_old}}."
+      ),
+      call = call
+    )
+  }
   duplicates <- unique(crosswalk$user_name[duplicated(crosswalk$user_name)])
   if (length(duplicates) > 0) {
     cli::cli_abort(

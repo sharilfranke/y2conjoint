@@ -16,6 +16,15 @@
       x user_name values in `crosswalk` must be unique.
       ! Duplicated: Northwind.
 
+# conjoint_df errors when one old_name maps to multiple collections
+
+    Code
+      conjoint_df(sample_data(), crosswalk)
+    Condition
+      Error in `conjoint_df()`:
+      x Each old_name in `crosswalk` must map to one collection.
+      ! Assigned more than once: A1B1.
+
 # conjoint_df errors when the NONE column is absent
 
     Code
