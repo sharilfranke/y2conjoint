@@ -1,12 +1,12 @@
 test_that("conjoint_df renames model columns to user names", {
   cjt <- sample_conjoint()
-  expect_contains(names(cjt), c("Northwind", "Cascade", "$249", "$299"))
+  expect_contains(names(cjt), c("Northwind", "Cascade", "$199", "$299"))
   expect_disjoint(names(cjt), c("A1B1", "A2B1"))
 })
 
 test_that("conjoint_df keeps extra columns", {
   cjt <- sample_conjoint()
-  expect_contains(names(cjt), c("ID", "age"))
+  expect_contains(names(cjt), c("respondent_id", "age"))
 })
 
 test_that("conjoint_df builds ordered and unordered collections", {
@@ -15,14 +15,31 @@ test_that("conjoint_df builds ordered and unordered collections", {
   names(collections) <- vapply(collections, function(cl) cl@name, character(1))
   expect_false(is_ordered(collections$Brand))
   expect_true(is_ordered(collections$Price))
-  expect_equal(collections$Price@levels, c("$249", "$299"))
+  expect_equal(collections$Price@levels, c("$199", "$299", "$399"))
 })
 
 test_that("protected_cols covers levels and NONE", {
   cjt <- sample_conjoint()
   expect_setequal(
     protected_cols(cjt),
-    c("Northwind", "Cascade", "$249", "$299", "NONE")
+    c(
+      "Northwind",
+      "Cascade",
+      "Meridian",
+      "$199",
+      "$299",
+      "$399",
+      "10 hours",
+      "20 hours",
+      "30 hours",
+      "128 GB",
+      "256 GB",
+      "512 GB",
+      "Black",
+      "Silver",
+      "Blue",
+      "NONE"
+    )
   )
 })
 
@@ -46,7 +63,8 @@ test_that("conjoint_df errors when the NONE column is absent", {
 
 test_that("conjoint_df errors on a partial collection order", {
   crosswalk <- sample_crosswalk()
-  crosswalk$collection_order <- c(NA, NA, 1, NA)
+  # Drop one Price rank so that collection is partially ordered.
+  crosswalk$collection_order[5] <- NA
   expect_snapshot(error = TRUE, conjoint_df(sample_data(), crosswalk))
 })
 

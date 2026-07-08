@@ -1,8 +1,12 @@
 test_that("competitive_set holds its specs", {
   cjt <- sample_conjoint()
   cs <- competitive_set(
-    spec(cjt, c("Northwind", "$249"), name = "A"),
-    spec(cjt, c("Cascade", "$299"), name = "B")
+    spec(
+      cjt,
+      c("Northwind", "$199", "20 hours", "256 GB", "Black"),
+      name = "A"
+    ),
+    spec(cjt, c("Cascade", "$299", "10 hours", "128 GB", "Blue"), name = "B")
   )
   expect_length(cs@specs, 2)
 })
@@ -14,9 +18,13 @@ test_that("competitive_set rejects non-spec elements", {
 test_that("competitive_set prints named and unnamed specs", {
   cjt <- sample_conjoint()
   cs <- competitive_set(
-    spec(cjt, c("Northwind", "$249"), name = "A"),
-    spec(cjt, c("Cascade", "$299"), name = "B"),
-    spec(cjt, c("Northwind", "$299")),
+    spec(
+      cjt,
+      c("Northwind", "$199", "20 hours", "256 GB", "Black"),
+      name = "A"
+    ),
+    spec(cjt, c("Cascade", "$299", "10 hours", "128 GB", "Blue"), name = "B"),
+    spec(cjt, c("Meridian", "$399", "30 hours", "512 GB", "Silver")),
     name = "Launch"
   )
   expect_snapshot(print(cs))
