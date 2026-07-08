@@ -95,6 +95,19 @@ group_levels <- function(x, levels, call = rlang::caller_env()) {
     )
   }
 
+  # An additive combine_fn would double-count a repeated level, so reject
+  # duplicates rather than silently deduplicating them.
+  dup <- unique(levels[duplicated(levels)])
+  if (length(dup) > 0) {
+    cli::cli_abort(
+      c(
+        "x" = "{cli::qty(dup)}Level{?s} {.val {dup}} {?is/are} selected more than once.",
+        "!" = "Each level may appear at most once in {.arg levels}."
+      ),
+      call = call
+    )
+  }
+
   selections <- purrr::map(level_sets, \(lv) levels[levels %in% lv])
   names(selections) <- collection_names
 

@@ -29,3 +29,8 @@ test_that("spec errors on an unknown level", {
   cjt <- sample_conjoint()
   expect_snapshot(error = TRUE, spec(cjt, "Nokia"))
 })
+
+test_that("spec errors on a duplicated level", {
+  cjt <- sample_conjoint()
+  expect_snapshot(error = TRUE, spec(cjt, c("Northwind", "Northwind", "$199")))
+})

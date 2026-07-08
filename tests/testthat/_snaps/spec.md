@@ -16,3 +16,12 @@
       ! Every level must belong to a collection of `x`.
       i Available levels: "Northwind", "Cascade", "Meridian", "$199", "$299", "$399", "10 hours", "20 hours", "30 hours", "128 GB", "256 GB", "512 GB", "Black", "Silver", and "Blue".
 
+# spec errors on a duplicated level
+
+    Code
+      spec(cjt, c("Northwind", "Northwind", "$199"))
+    Condition
+      Error in `spec()`:
+      x Level "Northwind" is selected more than once.
+      ! Each level may appear at most once in `levels`.
+
