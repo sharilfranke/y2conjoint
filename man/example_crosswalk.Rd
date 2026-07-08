@@ -5,7 +5,7 @@
 \alias{example_crosswalk}
 \title{Example conjoint crosswalk}
 \format{
-A tibble with 8 rows and 4 columns:
+A tibble with 15 rows and 4 columns:
 \describe{
 \item{old_name}{Model-format column name (\verb{A[NUM]B[NUM]}).}
 \item{user_name}{User-facing level name.}

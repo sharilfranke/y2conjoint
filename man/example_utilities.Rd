@@ -5,12 +5,14 @@
 \alias{example_utilities}
 \title{Example conjoint utilities}
 \format{
-A tibble with 25 rows and 13 columns:
+A tibble with 200 rows and 21 columns:
 \describe{
 \item{respondent_id}{Respondent identifier.}
 \item{A1B1, A1B2, A1B3}{Utilities for the three Brand levels.}
 \item{A2B1, A2B2, A2B3}{Utilities for the three Price levels.}
-\item{A3B1, A3B2}{Utilities for the two Battery levels.}
+\item{A3B1, A3B2, A3B3}{Utilities for the three Battery levels.}
+\item{A4B1, A4B2, A4B3}{Utilities for the three Storage levels.}
+\item{A5B1, A5B2, A5B3}{Utilities for the three Color levels.}
 \item{NONE}{Utility of the outside good (choosing nothing).}
 \item{age}{Respondent age in years.}
 \item{gender}{Respondent gender.}
