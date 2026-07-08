@@ -132,8 +132,9 @@ shares <- run_scenario(cjt, market)
 shares
 ```
 
-`total_share` is the combined share captured by the three products; the
-remainder goes to the outside good.
+Each column is one product's mean preference share. The shares plus the `NONE`
+outside good's share sum to 1, so the remainder of the market goes to the
+outside good.
 
 ```{r}
 #| label: plot
@@ -143,7 +144,6 @@ remainder goes to the outside good.
 library(ggplot2)
 
 shares |>
-  dplyr::select(-total_share) |>
   tidyr::pivot_longer(everything(), names_to = "product", values_to = "share") |>
   dplyr::mutate(product = sub("^share_", "", product)) |>
   ggplot(aes(share, reorder(product, share))) +

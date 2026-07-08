@@ -53,7 +53,8 @@ compute_product_utility <- function(x, spec, combine_fn = pmax) {
 #'   softmax. Values above 1 sharpen the choice probabilities toward the highest
 #'   utility; values below 1 flatten them. Defaults to `1`.
 #'
-#' @return A one-row tibble of `share_*` columns plus `total_share`.
+#' @return A one-row tibble with one `share_*` column per product in the
+#'   competitive set.
 #' @export
 run_scenario <- function(
   x,
@@ -97,8 +98,8 @@ softmax_rows <- function(m) {
   weights / rowSums(weights)
 }
 
-# Drop the outside good and return a one-row tibble of rounded product shares
-# plus their total (the share of the market the products capture together).
+# Drop the outside good and return a one-row tibble of rounded product shares,
+# one column per product in the competitive set.
 #' @keywords internal
 format_shares <- function(shares) {
   shares <- round(shares, 3)
@@ -106,7 +107,6 @@ format_shares <- function(shares) {
 
   out <- tibble::as_tibble(as.list(products))
   names(out) <- paste0("share_", names(products))
-  out$total_share <- sum(products)
   out
 }
 

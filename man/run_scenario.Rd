@@ -21,7 +21,8 @@ softmax. Values above 1 sharpen the choice probabilities toward the highest
 utility; values below 1 flatten them. Defaults to \code{1}.}
 }
 \value{
-A one-row tibble of \verb{share_*} columns plus \code{total_share}.
+A one-row tibble with one \verb{share_*} column per product in the
+competitive set.
 }
 \description{
 Applies a logit (softmax) choice model: each respondent's utility for every

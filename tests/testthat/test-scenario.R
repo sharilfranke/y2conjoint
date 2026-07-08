@@ -23,15 +23,14 @@ test_that("run_scenario rejects combine_fn naming an unknown collection", {
   )
 })
 
-test_that("run_scenario returns named shares that sum to total_share", {
+test_that("run_scenario returns one named share column per product", {
   cjt <- sample_conjoint()
   cs <- competitive_set(
     spec(cjt, c("Northwind", "$249"), name = "A"),
     spec(cjt, c("Cascade", "$299"), name = "B")
   )
   out <- run_scenario(cjt, cs)
-  expect_named(out, c("share_A", "share_B", "total_share"))
-  expect_equal(out$total_share, out$share_A + out$share_B)
+  expect_named(out, c("share_A", "share_B"))
 })
 
 test_that("run_scenario names unnamed specs sequentially", {
@@ -41,7 +40,7 @@ test_that("run_scenario names unnamed specs sequentially", {
     spec(cjt, c("Cascade", "$299"))
   )
   out <- run_scenario(cjt, cs)
-  expect_named(out, c("share_product_1", "share_product_2", "total_share"))
+  expect_named(out, c("share_product_1", "share_product_2"))
 })
 
 test_that("run_scenario matches a hand-computed softmax", {
