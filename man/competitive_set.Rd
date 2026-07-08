@@ -4,10 +4,11 @@
 \alias{competitive_set}
 \title{Bundle specifications into a competitive set}
 \usage{
-competitive_set(specs, name = character())
+competitive_set(..., name = character())
 }
 \arguments{
-\item{specs}{A list of \link{spec} objects.}
+\item{...}{\link{spec} objects that compete for share. Pass them individually;
+they are collected into the set's \code{specs}.}
 
 \item{name}{An optional single string naming the set.}
 }
@@ -20,8 +21,8 @@ scenario. All specs must reference the same set of collections.
 }
 \examples{
 cjt <- conjoint_df(example_utilities, example_crosswalk)
-competitive_set(list(
+competitive_set(
   spec(cjt, c("Northwind", "$299", "20 hours"), name = "Flagship"),
   spec(cjt, c("Cascade", "$199", "10 hours"), name = "Budget")
-))
+)
 }
