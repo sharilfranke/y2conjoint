@@ -101,6 +101,20 @@ validate_conjoint_input <- function(
       call = call
     )
   }
+  # A user_name that matches a column we are not renaming would create two
+  # columns with the same name after the rename.
+  untouched <- setdiff(names(data), crosswalk$old_name)
+  collisions <- intersect(crosswalk$user_name, untouched)
+  if (length(collisions) > 0) {
+    cli::cli_abort(
+      c(
+        "x" = "{cli::qty(collisions)}{.field user_name} value{?s} {.field {collisions}} would collide with existing column{?s} of {.arg data}.",
+        "!" = "Renaming would create duplicate columns.",
+        "i" = "Pick names that are not already columns of {.arg data}."
+      ),
+      call = call
+    )
+  }
   if (!none %in% names(data)) {
     cli::cli_abort(
       c(

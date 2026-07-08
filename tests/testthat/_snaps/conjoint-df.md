@@ -25,6 +25,16 @@
       x Each old_name in `crosswalk` must map to one collection.
       ! Assigned more than once: A1B1.
 
+# conjoint_df errors when a user_name collides with an existing column
+
+    Code
+      conjoint_df(sample_data(), crosswalk)
+    Condition
+      Error in `conjoint_df()`:
+      x user_name value age would collide with existing column of `data`.
+      ! Renaming would create duplicate columns.
+      i Pick names that are not already columns of `data`.
+
 # conjoint_df errors when the NONE column is absent
 
     Code
