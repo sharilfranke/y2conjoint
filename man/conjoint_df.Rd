@@ -14,7 +14,10 @@ coerced to a tibble internally.}
 \item{crosswalk}{A data frame mapping levels to collections, with columns
 \code{old_name} (the model-format column), \code{user_name} (the renamed column),
 \code{collection_name}, and \code{collection_order} (an integer rank, or \code{NA} for
-unordered collections). It is coerced to a tibble internally, which gives
+unordered collections). An optional logical \code{absence} column flags the
+"absence" level of a collection (see \link{collection}); at most one level per
+collection may be flagged, and it defaults to no absence levels when the
+column is missing. It is coerced to a tibble internally, which gives
 stricter column access (no partial matching) than a base data frame.}
 
 \item{none}{The name of the outside-good column. Defaults to \code{"NONE"}.}

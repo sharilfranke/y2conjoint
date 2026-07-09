@@ -34,3 +34,31 @@ test_that("spec errors on a duplicated level", {
   cjt <- sample_conjoint()
   expect_snapshot(error = TRUE, spec(cjt, c("Northwind", "Northwind", "$199")))
 })
+
+test_that("spec allows an absence level selected on its own", {
+  cols <- list(
+    collection(
+      "Camera",
+      c("No camera", "8 MP", "12 MP"),
+      absence = "No camera"
+    ),
+    collection("Brand", c("A", "B"))
+  )
+  sp <- spec(cols, c("No camera", "A"))
+  expect_equal(sp@selections$Camera, "No camera")
+})
+
+test_that("spec rejects an absence level combined with another level", {
+  cols <- list(
+    collection(
+      "Camera",
+      c("No camera", "8 MP", "12 MP"),
+      absence = "No camera"
+    ),
+    collection("Brand", c("A", "B"))
+  )
+  expect_snapshot(
+    error = TRUE,
+    spec(cols, c("No camera", "8 MP", "A"))
+  )
+})

@@ -80,3 +80,21 @@
       #   `256 GB` <dbl>, `512 GB` <dbl>, Black <dbl>, Silver <dbl>, Blue <dbl>,
       #   NONE <dbl>, age <int>, gender <chr>, region <chr>, income <dbl>
 
+# conjoint_df validates the absence column
+
+    Code
+      conjoint_df(sample_data(), cw)
+    Condition
+      Error in `conjoint_df()`:
+      x absence in `crosswalk` must be logical.
+      i Use TRUE for the absence level of a collection and FALSE otherwise.
+
+---
+
+    Code
+      conjoint_df(sample_data(), cw2)
+    Condition
+      Error in `conjoint_df()`:
+      x Collection Storage has more than one absence level.
+      ! At most one level per collection may be flagged as absence.
+

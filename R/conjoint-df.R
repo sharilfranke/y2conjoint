@@ -17,7 +17,10 @@
 #' @param crosswalk A data frame mapping levels to collections, with columns
 #'   `old_name` (the model-format column), `user_name` (the renamed column),
 #'   `collection_name`, and `collection_order` (an integer rank, or `NA` for
-#'   unordered collections). It is coerced to a tibble internally, which gives
+#'   unordered collections). An optional logical `absence` column flags the
+#'   "absence" level of a collection (see [collection]); at most one level per
+#'   collection may be flagged, and it defaults to no absence levels when the
+#'   column is missing. It is coerced to a tibble internally, which gives
 #'   stricter column access (no partial matching) than a base data frame.
 #' @param none The name of the outside-good column. Defaults to `"NONE"`.
 #'
@@ -71,6 +74,7 @@ validate_conjoint_input <- function(
   }
   validate_crosswalk_types(crosswalk, call = call)
   validate_collection_orders(crosswalk, call = call)
+  validate_crosswalk_absence(crosswalk, call = call)
   missing_levels <- setdiff(crosswalk$old_name, names(data))
   if (length(missing_levels) > 0) {
     cli::cli_abort(
@@ -151,6 +155,38 @@ validate_crosswalk_types <- function(crosswalk, call = rlang::caller_env()) {
   }
 }
 
+# The optional `absence` column, when present, must be logical and flag at most
+# one level per collection.
+#' @keywords internal
+validate_crosswalk_absence <- function(crosswalk, call = rlang::caller_env()) {
+  if (!"absence" %in% names(crosswalk)) {
+    return(invisible())
+  }
+  if (!is.logical(crosswalk$absence)) {
+    cli::cli_abort(
+      c(
+        "x" = "{.field absence} in {.arg crosswalk} must be logical.",
+        "i" = "Use {.val {TRUE}} for the absence level of a collection and {.val {FALSE}} otherwise."
+      ),
+      call = call
+    )
+  }
+  flagged <- crosswalk$absence
+  flagged[is.na(flagged)] <- FALSE
+  per_collection <- tapply(flagged, crosswalk$collection_name, sum)
+  multiple <- names(per_collection)[per_collection > 1]
+  if (length(multiple) > 0) {
+    cli::cli_abort(
+      c(
+        "x" = "{cli::qty(multiple)}Collection{?s} {.field {multiple}} {?has/have} more than one {.field absence} level.",
+        "!" = "At most one level per collection may be flagged as absence."
+      ),
+      call = call
+    )
+  }
+  invisible()
+}
+
 #' @keywords internal
 validate_collection_orders <- function(crosswalk, call = rlang::caller_env()) {
   orders <- split(crosswalk$collection_order, crosswalk$collection_name)
@@ -187,20 +223,35 @@ build_collections <- function(crosswalk) {
   })
 }
 
-# Assumes validate_collection_orders() has already run, so the order is either
-# all NA (unordered) or fully specified (ordered).
+# Assumes validate_collection_orders() and validate_crosswalk_absence() have
+# already run, so the order is either all NA (unordered) or fully specified
+# (ordered), and at most one level is flagged as absence.
 #' @keywords internal
 build_one_collection <- function(rows) {
   name <- rows$collection_name[[1]]
+  absence <- collection_absence_from_rows(rows)
   order <- rows$collection_order
   if (all(is.na(order))) {
-    return(collection(name = name, levels = rows$user_name))
+    return(collection(name = name, levels = rows$user_name, absence = absence))
   }
   ordered_collection(
     name = name,
     levels = rows$user_name,
-    order = rows$user_name[order(order)]
+    order = rows$user_name[order(order)],
+    absence = absence
   )
+}
+
+# The user_name flagged as the absence level for these rows, or character() when
+# there is no absence column or no flagged level.
+#' @keywords internal
+collection_absence_from_rows <- function(rows) {
+  if (!"absence" %in% names(rows)) {
+    return(character())
+  }
+  flagged <- rows$absence
+  flagged[is.na(flagged)] <- FALSE
+  rows$user_name[flagged]
 }
 
 #' @keywords internal
