@@ -53,3 +53,41 @@ test_that("collection rejects duplicate levels", {
 test_that("collection rejects an empty name", {
   expect_snapshot(error = TRUE, collection(name = "", levels = "A"))
 })
+
+test_that("collection stores an absence level and validates it", {
+  cam <- collection(
+    "Camera",
+    c("No camera", "8 MP", "12 MP"),
+    absence = "No camera"
+  )
+  expect_equal(collection_absence(cam), "No camera")
+
+  # Absence must be one of the levels.
+  expect_snapshot(
+    error = TRUE,
+    collection("Camera", c("8 MP", "12 MP"), absence = "No camera")
+  )
+  # At most one absence level.
+  expect_snapshot(
+    error = TRUE,
+    collection(
+      "Camera",
+      c("No camera", "None"),
+      absence = c("No camera", "None")
+    )
+  )
+})
+
+test_that("collection defaults to no absence level", {
+  cl <- collection("Brand", c("A", "B"))
+  expect_equal(collection_absence(cl), character())
+})
+
+test_that("ordered_collection carries an absence level", {
+  oc <- ordered_collection(
+    "Storage",
+    c("128 GB", "256 GB", "512 GB"),
+    absence = "128 GB"
+  )
+  expect_equal(collection_absence(oc), "128 GB")
+})

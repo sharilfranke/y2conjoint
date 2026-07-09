@@ -35,3 +35,21 @@
       ! <y2conjoint::collection> object is invalid:
       - @name must be a single non-empty string
 
+# collection stores an absence level and validates it
+
+    Code
+      collection("Camera", c("8 MP", "12 MP"), absence = "No camera")
+    Condition
+      Error:
+      ! <y2conjoint::collection> object is invalid:
+      - @absence must be one of @levels
+
+---
+
+    Code
+      collection("Camera", c("No camera", "None"), absence = c("No camera", "None"))
+    Condition
+      Error:
+      ! <y2conjoint::collection> object is invalid:
+      - @absence must be a single level or empty
+

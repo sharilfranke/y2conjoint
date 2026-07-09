@@ -5,15 +5,20 @@
 \alias{ordered_collection}
 \title{Collections of conjoint levels}
 \usage{
-collection(name = character(0), levels = character(0))
+collection(name = character(0), levels = character(0), absence = character(0))
 
-ordered_collection(name, levels, order = unique(levels))
+ordered_collection(name, levels, order = unique(levels), absence = character())
 }
 \arguments{
 \item{name}{A single string naming the collection.}
 
 \item{levels}{A character vector of the level (column) names that make up the
 collection.}
+
+\item{absence}{An optional single level name marking the "absence" level of
+the collection - the level that represents having none of the feature (e.g.
+\code{"No camera"} in a \code{Camera} collection). It must be one of \code{levels}.
+Defaults to \code{character()} (no absence level).}
 
 \item{order}{For \code{ordered_collection}, a character vector giving the levels
 in their intended order. It must contain exactly the same levels as
@@ -31,6 +36,13 @@ order of \code{levels} (there is no enforcement of that order elsewhere yet).
 }
 \examples{
 collection(name = "Brand", levels = c("Northwind", "Cascade"))
+
+# Flag the level that represents having none of the feature.
+collection(
+  name = "Camera",
+  levels = c("No camera", "8 MP", "12 MP"),
+  absence = "No camera"
+)
 
 # By default the level order is taken from `levels`.
 ordered_collection(name = "Price", levels = c("$199", "$299", "$399"))

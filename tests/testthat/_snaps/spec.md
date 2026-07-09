@@ -25,3 +25,12 @@
       x Level "Northwind" is selected more than once.
       ! Each level may appear at most once in `levels`.
 
+# spec rejects an absence level combined with another level
+
+    Code
+      spec(cols, c("No camera", "8 MP", "A"))
+    Condition
+      Error in `spec()`:
+      x Absence level "No camera" cannot be combined with other levels.
+      ! An absence level must be selected on its own within its collection.
+

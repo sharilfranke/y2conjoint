@@ -86,3 +86,28 @@ test_that("conjoint_df errors on a partial collection order", {
 test_that("conjoint_df prints a structure header", {
   expect_snapshot(print(sample_conjoint()))
 })
+
+test_that("conjoint_df reads an optional absence column from the crosswalk", {
+  cw <- sample_crosswalk()
+  cw$absence <- cw$user_name == "128 GB"
+  cjt <- conjoint_df(sample_data(), cw)
+
+  storage <- Filter(\(cl) cl@name == "Storage", conjoint_collections(cjt))[[1]]
+  expect_equal(collection_absence(storage), "128 GB")
+})
+
+test_that("conjoint_df defaults to no absence levels when the column is absent", {
+  cjt <- sample_conjoint()
+  absences <- purrr::map(conjoint_collections(cjt), collection_absence)
+  expect_true(all(lengths(absences) == 0))
+})
+
+test_that("conjoint_df validates the absence column", {
+  cw <- sample_crosswalk()
+  cw$absence <- "yes"
+  expect_snapshot(error = TRUE, conjoint_df(sample_data(), cw))
+
+  cw2 <- sample_crosswalk()
+  cw2$absence <- cw2$user_name %in% c("128 GB", "256 GB")
+  expect_snapshot(error = TRUE, conjoint_df(sample_data(), cw2))
+})

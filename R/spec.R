@@ -111,6 +111,27 @@ group_levels <- function(x, levels, call = rlang::caller_env()) {
   selections <- purrr::map(level_sets, \(lv) levels[levels %in% lv])
   names(selections) <- collection_names
 
+  # An absence level ("No camera") represents having none of the feature, so it
+  # cannot be co-selected with any other level from the same collection.
+  absence_levels <- purrr::map(collections, collection_absence)
+  conflicts <- purrr::map2_chr(selections, absence_levels, \(sel, abs) {
+    if (length(abs) == 1 && abs %in% sel && length(sel) > 1) {
+      abs
+    } else {
+      NA_character_
+    }
+  })
+  conflicts <- conflicts[!is.na(conflicts)]
+  if (length(conflicts) > 0) {
+    cli::cli_abort(
+      c(
+        "x" = "{cli::qty(conflicts)}Absence level{?s} {.val {conflicts}} cannot be combined with other levels.",
+        "!" = "An absence level must be selected on its own within its collection."
+      ),
+      call = call
+    )
+  }
+
   empty <- collection_names[lengths(selections) == 0]
   if (length(empty) > 0) {
     cli::cli_warn("No levels selected for collection{?s} {.field {empty}}.")
