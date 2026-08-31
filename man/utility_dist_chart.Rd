@@ -16,7 +16,7 @@ and it will make a faceted chart by collection.}
 
 \item{color}{A base color (anything \code{\link[grDevices:col2rgb]{grDevices::col2rgb()}} accepts), or a
 named character vector of one base color per collection (names matching
-\code{collection}) to give each collection its own gradient. Pass a list of colors to give each collection its own color.}
+\code{collection}) to give each collection its own gradient. Pass a list of colors to give each collection its own color. You must specify which collection gets which color.}
 
 \item{scale}{The \code{scale} argument passed to
 \code{\link[ggridges:geom_density_ridges]{ggridges::geom_density_ridges()}}; controls how much adjacent ridges
